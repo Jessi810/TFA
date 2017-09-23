@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TFA.Models;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace TFA.Controllers
 {
@@ -72,6 +74,21 @@ namespace TFA.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            // Google reCaptcha validation
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LeP5S0UAAAAAIRNJSYxs4maRDcPA107rwog9fD6";
+            var client = new WebClient();
+            var downloadStringResult = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(downloadStringResult);
+            var status = (bool)obj.SelectToken("success");
+
+            // Redisplay page if reCaptcha validation failed
+            if (!status)
+            {
+                ViewBag.RecaptchaMessage = "Google reCaptcha validation failed. Please try again";
                 return View(model);
             }
 
