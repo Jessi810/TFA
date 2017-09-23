@@ -12,6 +12,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using TFA.Models;
 using System.Configuration;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace TFA
 {
@@ -53,7 +56,19 @@ namespace TFA
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your SMS service here to send a text message.
+            string accountSid = ConfigurationManager.AppSettings["TwilioAccountSid"].ToString();
+            string authToken = ConfigurationManager.AppSettings["TwilioAuthToken"].ToString();
+
+            TwilioClient.Init(accountSid, authToken);
+
+            string senderNumber = ConfigurationManager.AppSettings["TwilioSenderNumber"].ToString();
+
+            var msg = MessageResource.Create(
+                to: new PhoneNumber(message.Destination),
+                from: new PhoneNumber(senderNumber),
+                body: message.Body
+                );
+
             return Task.FromResult(0);
         }
     }
