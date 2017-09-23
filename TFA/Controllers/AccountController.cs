@@ -97,7 +97,7 @@ namespace TFA.Controllers
 
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe, Email = model.Email });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -142,15 +142,15 @@ namespace TFA.Controllers
                 case SignInStatus.LockedOut:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
-                    //var sl = new SecLog
-                    //{
-                    //    Type = "User Account Lockout",
-                    //    Date = DateTime.Now,
-                    //    UserName = user.UserName
-                    //};
+                    var sl = new SecLog
+                    {
+                        Type = "User Account Lockout",
+                        Date = DateTime.Now,
+                        UserName = model.Email
+                    };
 
-                    //secLog.SecLogs.Add(sl);
-                    //await secLog.SaveChangesAsync();
+                    secLog.SecLogs.Add(sl);
+                    await secLog.SaveChangesAsync();
 
                     return View("Lockout");
                 case SignInStatus.Failure:
@@ -340,7 +340,7 @@ namespace TFA.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe, Email = model.Email });
         }
 
         //
