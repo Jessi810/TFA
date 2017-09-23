@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using TFA.Models;
+using System.Configuration;
 
 namespace TFA
 {
@@ -18,8 +19,33 @@ namespace TFA
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            /// Data is hard encoded. Will change if necessary.
+            // Credentials:
+            var emailUsername = ConfigurationManager.AppSettings["EmailUsername"].ToString();
+            var emailSender = ConfigurationManager.AppSettings["EmailSender"].ToString();
+            var emailPassword = ConfigurationManager.AppSettings["EmailPassword"].ToString();
+            var emailClient = ConfigurationManager.AppSettings["EmailClient"].ToString();
+
+            // Configure the client:
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient(emailClient);
+
+            // Create the credentials:
+            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+
+            client.Port = 587;
+            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+
+            // Create the message:
+            var mail = new System.Net.Mail.MailMessage(emailSender, message.Destination);
+
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
+
+            // Send:
+            return client.SendMailAsync(mail);
         }
     }
 
