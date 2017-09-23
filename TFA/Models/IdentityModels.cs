@@ -35,6 +35,23 @@ namespace TFA.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Entity<IdentityUser>()
+                .ToTable("User");
+
+            modelBuilder.Entity<IdentityRole>()
+                .ToTable("Role");
+
+            modelBuilder.Entity<IdentityUserRole>()
+                .HasKey(r => new { r.UserId, r.RoleId })
+                .ToTable("UserRole");
+
+            modelBuilder.Entity<IdentityUserLogin>()
+                .HasKey(l => new { l.LoginProvider, l.ProviderKey, l.UserId })
+                .ToTable("UserLogin");
+
+            modelBuilder.Entity<IdentityUserClaim>()
+                .ToTable("UserClaim");
         }
     }
 }
