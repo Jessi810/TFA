@@ -18,6 +18,8 @@ namespace TFA.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        private SecLogContext secLog = new SecLogContext();
+
         public AccountController()
         {
         }
@@ -75,12 +77,24 @@ namespace TFA.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
+                    ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+                    var sl = new SecLog
+                    {
+                        Type = "User Account Lockout",
+                        Date = DateTime.Now,
+                        UserName = user.UserName
+                    };
+
+                    secLog.SecLogs.Add(sl);
+                    await secLog.SaveChangesAsync();
+
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
@@ -126,6 +140,18 @@ namespace TFA.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
+                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+                    //var sl = new SecLog
+                    //{
+                    //    Type = "User Account Lockout",
+                    //    Date = DateTime.Now,
+                    //    UserName = user.UserName
+                    //};
+
+                    //secLog.SecLogs.Add(sl);
+                    //await secLog.SaveChangesAsync();
+
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:

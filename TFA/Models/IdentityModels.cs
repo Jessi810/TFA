@@ -26,7 +26,7 @@ namespace TFA.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("UserAccounts", throwIfV1Schema: false)
+            : base("TFAAccount", throwIfV1Schema: false)
         {
             Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
         }
@@ -41,21 +41,21 @@ namespace TFA.Models
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             modelBuilder.Entity<IdentityUser>()
-                .ToTable("Users");
+                .ToTable("TFAUser");
 
             modelBuilder.Entity<IdentityRole>()
-                .ToTable("Roles");
+                .ToTable("TFARole");
 
             modelBuilder.Entity<IdentityUserRole>()
                 .HasKey(r => new { r.UserId, r.RoleId })
-                .ToTable("UserRoles");
+                .ToTable("TFAUserRole");
 
             modelBuilder.Entity<IdentityUserLogin>()
                 .HasKey(l => new { l.LoginProvider, l.ProviderKey, l.UserId })
-                .ToTable("UserLogins");
+                .ToTable("TFAUserLogin");
 
             modelBuilder.Entity<IdentityUserClaim>()
-                .ToTable("UserClaims");
+                .ToTable("TFAUserClaim");
         }
     }
 }

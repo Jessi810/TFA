@@ -211,9 +211,9 @@
     <Content Include="App_Data\SecLogDb_log.ldf">
       <DependentUpon>SecLogDb.mdf</DependentUpon>
     </Content>
-    <Content Include="App_Data\UserAccounts.mdf" />
-    <Content Include="App_Data\UserAccounts_log.ldf">
-      <DependentUpon>UserAccounts.mdf</DependentUpon>
+    <Content Include="App_Data\TFAAccount.mdf" />
+    <Content Include="App_Data\TFAAccount_log.ldf">
+      <DependentUpon>TFAAccount.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
