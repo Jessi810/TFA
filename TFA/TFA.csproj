@@ -193,10 +193,12 @@
     </Compile>
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
     <Compile Include="Migrations\ImageContext\Config01.cs" />
+    <Compile Include="Migrations\SecLogContext\Config02.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ImageModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SecLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -205,13 +207,13 @@
     <Content Include="App_Data\MyImage_log.ldf">
       <DependentUpon>MyImage.mdf</DependentUpon>
     </Content>
-    <Content Include="App_Data\UserAccount.mdf" />
+    <Content Include="App_Data\SecLogDb.mdf" />
+    <Content Include="App_Data\SecLogDb_log.ldf">
+      <DependentUpon>SecLogDb.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\UserAccounts.mdf" />
     <Content Include="App_Data\UserAccounts_log.ldf">
       <DependentUpon>UserAccounts.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\UserAccount_log.ldf">
-      <DependentUpon>UserAccount.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
