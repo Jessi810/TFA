@@ -3,18 +3,22 @@
     ViewBag.Title = "Send";
 }
 
-<h2>@ViewBag.Title.</h2>
-
-@using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+@using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4", role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.Hidden("rememberMe", @Model.RememberMe)
     <h4>Send verification code</h4>
     <hr />
     <div class="row">
-        <div class="col-md-8">
-            Select Two-Factor Authentication Provider:
-            @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers)
-            <input type="submit" value="Submit" class="btn btn-default" />
+        <label class="col-md-12">Select Authentication Provider:</label>
+        <div class="col-md-12">
+            @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new { @class = "btn btn-default" })
+            
+        </div>
+    </div>
+
+    <div class="form-group margin-top-24">
+        <div class="col-md-12">
+            <input type="submit" value="Submit" class="btn btn-success" />
         </div>
     </div>
 }
