@@ -18,6 +18,8 @@ namespace TFA.Models
 
     public class ImageContext : DbContext
     {
+        public DbSet<Image> Images { get; set; }
+
         public ImageContext() : base("Image")
         {
             Database.SetInitializer<ImageContext>(new DropCreateDatabaseIfModelChanges<ImageContext>());
