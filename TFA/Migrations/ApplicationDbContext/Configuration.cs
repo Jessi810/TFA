@@ -46,7 +46,9 @@ namespace TFA.Migrations.ApplicationDbContext
                     LockoutEndDateUtc = null,
                     LockoutEnabled = true,
                     AccessFailedCount = 0,
-                    UserName = "test.tfa1718@gmail.com"
+                    UserName = "test.tfa1718@gmail.com",
+                    SerialHash = null,
+                    PasswordResetDate = new DateTime(3000, 1, 1, 0, 0, 0)
                 };
 
                 manager.Create(user, "Admin@123");

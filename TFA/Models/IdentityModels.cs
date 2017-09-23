@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System;
 
 namespace TFA.Models
 {
@@ -17,6 +18,9 @@ namespace TFA.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public string SerialHash { get; set; }
+        public DateTime PasswordResetDate { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
