@@ -22,7 +22,7 @@ namespace TFA.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("Account", throwIfV1Schema: false)
+            : base("UserAccount", throwIfV1Schema: false)
         {
             Database.SetInitializer<ApplicationDbContext>(new CreateDatabaseIfNotExists<ApplicationDbContext>());
         }
