@@ -57,7 +57,5 @@ namespace TFA.Models
             modelBuilder.Entity<IdentityUserClaim>()
                 .ToTable("UserClaim");
         }
-
-        public DbSet<SecurityLogModels> SecurityLogs { get; set; }
     }
 }
