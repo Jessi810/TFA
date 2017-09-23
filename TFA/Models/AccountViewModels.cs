@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TFA.Models
 {
+    public class ImageLoginViewModel
+    {
+        public string Email { get; set; }
+
+        [Required]
+        public string SerialHash { get; set; }
+    }
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
