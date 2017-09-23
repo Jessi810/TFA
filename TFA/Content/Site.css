@@ -30,3 +30,12 @@ textarea {
 .margin-top-24 {
     margin: 24px;
 }
+
+.small-panel {
+    /*background-color: #b3b3cc;*/
+    border-radius: 20px;
+    border-style: groove;
+    min-height: 500px;
+    padding: 40px;
+    opacity: 0.85
+}
