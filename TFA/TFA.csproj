@@ -192,19 +192,41 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
+    <Compile Include="Migrations\ImageContext\Config01.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ImageModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\MyImage.mdf" />
+    <Content Include="App_Data\MyImage_log.ldf">
+      <DependentUpon>MyImage.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\UserAccount.mdf" />
     <Content Include="App_Data\UserAccount_log.ldf">
       <DependentUpon>UserAccount.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MyImages\Abduction.png" />
+    <Content Include="Content\MyImages\Aboard.png" />
+    <Content Include="Content\MyImages\Armageddon.png" />
+    <Content Include="Content\MyImages\Bash Blast.png" />
+    <Content Include="Content\MyImages\Bleak Blaze.png" />
+    <Content Include="Content\MyImages\Blue Abyss.png" />
+    <Content Include="Content\MyImages\City of Emerald.png" />
+    <Content Include="Content\MyImages\Cliff House.png" />
+    <Content Include="Content\MyImages\Cloudy Canvas.png" />
+    <Content Include="Content\MyImages\Cold World.png" />
+    <Content Include="Content\MyImages\Curved Canvas.png" />
+    <Content Include="Content\MyImages\Dazzled Horizon.png" />
+    <Content Include="Content\MyImages\Eye Oh.png" />
+    <Content Include="Content\MyImages\Guard the Castle.png" />
+    <Content Include="Content\MyImages\Kinetic Theory.png" />
+    <Content Include="Content\MyImages\Let%27s Go Home.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
