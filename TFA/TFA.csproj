@@ -206,6 +206,10 @@
       <DependentUpon>MyImage.mdf</DependentUpon>
     </Content>
     <Content Include="App_Data\UserAccount.mdf" />
+    <Content Include="App_Data\UserAccounts.mdf" />
+    <Content Include="App_Data\UserAccounts_log.ldf">
+      <DependentUpon>UserAccounts.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\UserAccount_log.ldf">
       <DependentUpon>UserAccount.mdf</DependentUpon>
     </Content>

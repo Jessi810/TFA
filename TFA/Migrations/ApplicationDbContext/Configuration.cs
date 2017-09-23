@@ -48,7 +48,7 @@ namespace TFA.Migrations.ApplicationDbContext
                     AccessFailedCount = 0,
                     UserName = "test.tfa1718@gmail.com",
                     SerialHash = null,
-                    PasswordResetDate = new DateTime(3000, 1, 1, 0, 0, 0)
+                    PasswordResetDate = new DateTime(3000, 1, 1, 12, 0, 0)
                 };
 
                 manager.Create(user, "Admin@123");
