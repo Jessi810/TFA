@@ -192,7 +192,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
-    <Compile Include="Migrations\ImageContext\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Image.cs" />
@@ -287,7 +286,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1897</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:22222/</IISUrl>
+          <IISUrl>http://localhost:1897/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
