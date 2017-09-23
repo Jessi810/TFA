@@ -20,7 +20,7 @@ namespace TFA.Models
     {
         public ImageContext() : base("MyImage")
         {
-            Database.SetInitializer<ImageContext>(new DropCreateDatabaseAlways<ImageContext>());
+            Database.SetInitializer<ImageContext>(new DropCreateDatabaseIfModelChanges<ImageContext>());
         }
 
         public DbSet<ImageModels> Images { get; set; }

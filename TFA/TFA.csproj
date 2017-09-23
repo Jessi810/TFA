@@ -218,21 +218,21 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\MyImages\Abduction.png" />
-    <Content Include="Content\MyImages\Aboard.png" />
-    <Content Include="Content\MyImages\Armageddon.png" />
+    <Content Include="Content\MyImages\Aboard.jpg" />
+    <Content Include="Content\MyImages\Armageddon.jpg" />
     <Content Include="Content\MyImages\Bash Blast.png" />
-    <Content Include="Content\MyImages\Bleak Blaze.png" />
-    <Content Include="Content\MyImages\Blue Abyss.png" />
-    <Content Include="Content\MyImages\City of Emerald.png" />
+    <Content Include="Content\MyImages\Bleak Blaze.jpg" />
+    <Content Include="Content\MyImages\Blue Abyss.jpg" />
+    <Content Include="Content\MyImages\City of Emerald.jpg" />
     <Content Include="Content\MyImages\Cliff House.png" />
-    <Content Include="Content\MyImages\Cloudy Canvas.png" />
-    <Content Include="Content\MyImages\Cold World.png" />
-    <Content Include="Content\MyImages\Curved Canvas.png" />
-    <Content Include="Content\MyImages\Dazzled Horizon.png" />
+    <Content Include="Content\MyImages\Cloudy Canvas.jpg" />
+    <Content Include="Content\MyImages\Cold World.jpg" />
+    <Content Include="Content\MyImages\Curved Canvas.jpg" />
+    <Content Include="Content\MyImages\Dazzled Horizon.jpg" />
     <Content Include="Content\MyImages\Eye Oh.png" />
     <Content Include="Content\MyImages\Guard the Castle.png" />
-    <Content Include="Content\MyImages\Kinetic Theory.png" />
-    <Content Include="Content\MyImages\Let%27s Go Home.png" />
+    <Content Include="Content\MyImages\Kinetic Theory.jpg" />
+    <Content Include="Content\MyImages\Let%27s Go Home.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -285,6 +285,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\ImageLogin.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -313,7 +314,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1897</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1897/</IISUrl>
+          <IISUrl>http://localhost:22222/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
