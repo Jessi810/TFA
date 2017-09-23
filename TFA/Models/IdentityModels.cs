@@ -20,7 +20,7 @@ namespace TFA.Models
         }
 
         public string SerialHash { get; set; }
-        public DateTime PasswordResetDate { get; set; }
+        public DateTime? PasswordResetDate { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
