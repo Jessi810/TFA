@@ -21,6 +21,7 @@ namespace TFA.Controllers
         private ApplicationUserManager _userManager;
 
         private SecLogContext secLog = new SecLogContext();
+        private ImageContext img = new ImageContext();
 
         public AccountController()
         {
@@ -54,6 +55,25 @@ namespace TFA.Controllers
             {
                 _userManager = value;
             }
+        }
+
+        //
+        // GET: /Account/ImageLogin
+        [AllowAnonymous]
+        public async Task<ActionResult> ImageLogin(string email)
+        {
+            ApplicationUser user = await UserManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                return View("Error");
+            }
+            
+            if(user.SerialHash == null)
+            {
+                return RedirectToAction("Index", "Manage");
+            }
+
+            return View(img.Images.ToList());
         }
 
         //
@@ -125,14 +145,14 @@ namespace TFA.Controllers
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
-        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
+        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe, string email)
         {
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe, Email = email });
         }
 
         //
@@ -155,7 +175,10 @@ namespace TFA.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
+                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+                    return RedirectToAction("ImageLogin", new { Email = model.Email });
+
+                    //return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
@@ -324,7 +347,7 @@ namespace TFA.Controllers
         //
         // GET: /Account/SendCode
         [AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
+        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe, string email)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
@@ -333,7 +356,7 @@ namespace TFA.Controllers
             }
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe, Email = email });
         }
 
         //

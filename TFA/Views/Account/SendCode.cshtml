@@ -3,7 +3,7 @@
     ViewBag.Title = "Send";
 }
 
-@using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal small-panel col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4", role = "form" })) {
+@using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl, Email = Model.Email }, FormMethod.Post, new { @class = "form-horizontal small-panel col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4", role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.Hidden("rememberMe", @Model.RememberMe)
     <h4>Send verification code</h4>
