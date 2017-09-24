@@ -31,6 +31,15 @@ textarea {
     margin: 24px;
 }
 
+.max-hw {
+    height: 100%;
+    width: 100%;
+}
+
+.no-padding {
+    padding: 0;
+}
+
 .small-panel {
     /*background-color: #b3b3cc;*/
     border-radius: 20px;
