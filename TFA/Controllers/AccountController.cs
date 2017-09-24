@@ -73,6 +73,8 @@ namespace TFA.Controllers
                 return RedirectToAction("Index", "Manage");
             }
 
+            TempData["UserEmail"] = email;
+
             return View(img.Images.ToList());
         }
 
@@ -83,6 +85,36 @@ namespace TFA.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        //
+        // POST: /Account/ImageLogin
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ImageLogin(ImageLoginViewModel model, string Email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(img.Images.ToList());
+            }
+
+            if (model.ImageSerial == null)
+            {
+                return View(img.Images.ToList());
+            }
+
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (user.SerialHash.Equals(model.ImageSerial))
+            {
+                return RedirectToAction("Index", "Manage");
+            }
+            else
+            {
+                ViewBag.ImageLoginMessage = "Invalid images selected. Please try again.";
+                return View(img.Images.ToList());
+            }
         }
 
         //

@@ -7,8 +7,9 @@ namespace TFA.Models
     {
         public string Email { get; set; }
 
-        [Required]
         public string SerialHash { get; set; }
+
+        public string ImageSerial { get; set; }
     }
 
     public class ExternalLoginConfirmationViewModel
