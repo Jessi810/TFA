@@ -54,6 +54,7 @@
 {
     @Html.AntiForgeryToken()
     <h4>Select images in correct order</h4>
+    @ViewBag.ImageLoginMessage
     <hr />
 
     <div class="row">
@@ -71,7 +72,6 @@
     </div>
     <input type="text" id="txtImageSerial" name="imageSerial" value="" hidden />
     <input type="text" id="txtEmail" name="email" value="@TempData["UserEmail"]" hidden />
-    @TempData["UserEmail"]
     <div class="col-md-12">
         <input type="submit" class="btn btn-success" value="Register" />
     </div>

@@ -79,20 +79,11 @@ namespace TFA.Controllers
         }
 
         //
-        // GET: /Account/Login
-        [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-        //
         // POST: /Account/ImageLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ImageLogin(ImageLoginViewModel model, string Email)
+        public async Task<ActionResult> ImageLogin(ImageLoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -101,6 +92,8 @@ namespace TFA.Controllers
 
             if (model.ImageSerial == null)
             {
+                TempData["UserEmail"] = model.Email;
+                ViewBag.ImageLoginMessage = "Please select an images to login";
                 return View(img.Images.ToList());
             }
 
@@ -112,9 +105,19 @@ namespace TFA.Controllers
             }
             else
             {
+                TempData["UserEmail"] = model.Email;
                 ViewBag.ImageLoginMessage = "Invalid images selected. Please try again.";
                 return View(img.Images.ToList());
             }
+        }
+
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
         //
