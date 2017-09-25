@@ -112,6 +112,18 @@ namespace TFA.Controllers
         }
 
         //
+        // GET: /Account/PasswordExpired
+        [AllowAnonymous]
+        public async Task<ActionResult> PasswordExpired(string email)
+        {
+            ApplicationUser user = await UserManager.FindByEmailAsync(email);
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id, "Reset Password", "Your password has expired. Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            return View("PasswordExpiredConfirmation");
+        }
+
+        //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -147,6 +159,17 @@ namespace TFA.Controllers
                 return View(model);
             }
 
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            DateTime serverDate = DateTime.Now;
+            var diff = user.PasswordResetDate.Subtract(serverDate);
+            if (diff.Days < 0)
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+                return RedirectToAction("PasswordExpired", "Account", new { Email = user.Email });
+            }
+
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
@@ -155,7 +178,7 @@ namespace TFA.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
                     var sl = new SecLog
                     {

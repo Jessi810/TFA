@@ -299,6 +299,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\ImageLogin.cshtml" />
     <Content Include="Scripts\wrapper.js.ejs" />
+    <Content Include="Views\Account\PasswordExpiredConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
