@@ -53,7 +53,7 @@
 @using (Html.BeginForm("ImageLogin", "Account", new { Email = TempData["UserEmail"] }, FormMethod.Post, new { @class = "form-horizontal small-panel col-sm-offset-3 col-md-offset-4 col-sm-6 col-md-4", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Select images in correct order</h4>
+    <h4>Select your images</h4>
     @ViewBag.ImageLoginMessage
     <hr />
 
@@ -73,7 +73,7 @@
     <input type="text" id="txtImageSerial" name="imageSerial" value="" hidden />
     <input type="text" id="txtEmail" name="email" value="@TempData["UserEmail"]" hidden />
     <div class="col-md-12">
-        <input type="submit" class="btn btn-success" value="Register" />
+        <input type="submit" class="btn btn-success" value="Login" />
     </div>
 }
 

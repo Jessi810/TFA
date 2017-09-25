@@ -43,7 +43,7 @@ namespace TFA.Models
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Remember this browser?")]
+        [Display(Name = "Remember this browser")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -69,7 +69,7 @@ namespace TFA.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Stay login")]
         public bool RememberMe { get; set; }
     }
 
