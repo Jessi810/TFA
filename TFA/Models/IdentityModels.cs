@@ -24,6 +24,8 @@ namespace TFA.Models
         public DateTime PasswordResetDate { get; set; }
         [Required]
         public bool ThreeFactorEnabled { get; set; }
+
+        public string VCode { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

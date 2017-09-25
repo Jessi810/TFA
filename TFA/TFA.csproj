@@ -196,6 +196,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\SerialImageEncryptor.cs" />
     <Compile Include="Migrations\ApplicationDbContext\Configuration.cs" />
     <Compile Include="Migrations\ImageContext\Config01.cs" />
     <Compile Include="Migrations\SecLogContext\Config02.cs" />

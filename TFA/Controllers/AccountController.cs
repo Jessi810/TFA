@@ -126,7 +126,13 @@ namespace TFA.Controllers
             }
 
             ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            user.SerialHash = model.SerialHash;
+
+            // Encrypt serials
+            var key = Helper.SerialImageEncryptor.GeneratePassword(16);
+            var serialHash = Helper.SerialImageEncryptor.EncodePassword(model.SerialHash, key);
+
+            user.SerialHash = serialHash;
+            user.VCode = key;
             await UserManager.UpdateAsync(user);
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.AddImagePasswordSuccess });
@@ -185,8 +191,13 @@ namespace TFA.Controllers
                 return View(img.Images.ToList());
             }
 
-            if (user.SerialHash.Equals(model.ImageSerial))
+            // Encode
+            var hashCode = user.VCode;
+            var encodeSerial = Helper.SerialImageEncryptor.EncodePassword(user.SerialHash, hashCode);
+
+            if (user.SerialHash.Equals(encodeSerial))
             {
+                await UserManager.ResetAccessFailedCountAsync(user.Id);
                 return RedirectToAction("Index", "Manage");
             }
             else

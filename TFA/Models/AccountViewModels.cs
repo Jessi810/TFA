@@ -10,12 +10,15 @@ namespace TFA.Models
         public string SerialHash { get; set; }
 
         public string ImageSerial { get; set; }
+
+        public string VCode { get; set; }
     }
 
     public class AddImagePasswordViewModel
     {
         [Required]
         public string SerialHash { get; set; }
+        public string VCode { get; set; }
     }
 
     public class ExternalLoginConfirmationViewModel
