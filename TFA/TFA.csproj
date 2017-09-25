@@ -308,6 +308,7 @@
     <Content Include="Views\Account\PasswordExpiredConfirmation.cshtml" />
     <Content Include="Views\Account\AddImagePassword.cshtml" />
     <Content Include="Views\Account\ChangeImagePassword.cshtml" />
+    <Content Include="Views\Manage\ChangeEmail.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

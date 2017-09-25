@@ -5,6 +5,14 @@ using Microsoft.Owin.Security;
 
 namespace TFA.Models
 {
+    public class ChangeEmailViewModel
+    {
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
+
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
@@ -16,6 +24,7 @@ namespace TFA.Models
         public int DaysToResetPassword { get; set; }
         public bool ThreeFactorEnabled { get; set; }
         public bool ImagePasswordSet { get; set; }
+        public string Email { get; set; }
     }
 
     public class ManageLoginsViewModel

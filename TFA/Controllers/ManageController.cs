@@ -51,6 +51,44 @@ namespace TFA.Controllers
         }
 
         //
+        // GET: /Manage/ChangeEmail
+        public async Task<ActionResult> ChangeEmail()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        //
+        // POST: /Manage/ChangeEmail
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmailViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (user != null)
+            {
+                user.Email = model.Email;
+                await UserManager.UpdateAsync(user);
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            }
+            else
+            {
+                return View("Error");
+            }
+        }
+
+        //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
@@ -92,7 +130,8 @@ namespace TFA.Controllers
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 DaysToResetPassword = diff.Days,
                 ThreeFactorEnabled = user.ThreeFactorEnabled,
-                ImagePasswordSet = user.SerialHash == null ? false : true
+                ImagePasswordSet = user.SerialHash == null ? false : true,
+                Email = user.Email
             };
             return View(model);
         }
