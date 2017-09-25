@@ -63,9 +63,10 @@ namespace TFA.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : message == ManageMessageId.AddImagePasswordSuccess ? "Your image password was added."
                 : message == ManageMessageId.ChangeImagePasswordSuccess ? "Your image password has been changed."
+                : message == ManageMessageId.RemoveImagePasswordSuccess ? "Your image password was removed."
                 : "";
 
-            var userId = User.Identity.GetUserId();
+             var userId = User.Identity.GetUserId();
             ApplicationUser user = await UserManager.FindByIdAsync(userId);
 
             DateTime serverDate = DateTime.Now;
@@ -287,6 +288,22 @@ namespace TFA.Controllers
         }
 
         //
+        // POST: /Manage/RemoveImagePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveImagePassword()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                user.SerialHash = null;
+                await UserManager.UpdateAsync(user);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+            return RedirectToAction("Index", new { Message = ManageMessageId.RemoveImagePasswordSuccess });
+        }
+
+        //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
@@ -460,7 +477,8 @@ namespace TFA.Controllers
             RemovePhoneSuccess,
             Error,
             AddImagePasswordSuccess,
-            ChangeImagePasswordSuccess
+            ChangeImagePasswordSuccess,
+            RemoveImagePasswordSuccess
         }
 
 #endregion

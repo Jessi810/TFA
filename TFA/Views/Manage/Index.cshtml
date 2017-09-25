@@ -48,7 +48,7 @@
             }
             else
             {
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Add phone number", "AddPhoneNumber")&nbsp;&nbsp;]</text>
             }
         </dd>
 
@@ -131,7 +131,7 @@
             {
                 <text>Yes</text><br />
                 <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "ChangeImagePassword", "Account")&nbsp;&nbsp;]</text>
-                using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                using (Html.BeginForm("RemoveImagePassword", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
@@ -140,6 +140,7 @@
             else
             {
                 <text>No</text>
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Add image password", "AddImagePassword", "Account")&nbsp;&nbsp;]</text>
             }
         </dd>
     </dl>
