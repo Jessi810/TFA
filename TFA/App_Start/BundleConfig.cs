@@ -25,7 +25,8 @@ namespace TFA
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-darkly.css",
-                      "~/Content/Site.css"));
+                      "~/Content/Site.css",
+                      "~/Content/checkbox-styles.css"));
         }
     }
 }
