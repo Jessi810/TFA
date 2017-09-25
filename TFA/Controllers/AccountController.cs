@@ -193,7 +193,7 @@ namespace TFA.Controllers
 
             // Encode
             var hashCode = user.VCode;
-            var encodeSerial = Helper.SerialImageEncryptor.EncodePassword(user.SerialHash, hashCode);
+            var encodeSerial = Helper.SerialImageEncryptor.EncodePassword(model.ImageSerial, hashCode);
 
             if (user.SerialHash.Equals(encodeSerial))
             {
