@@ -13,6 +13,7 @@ namespace TFA.Models
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
+        public int DaysToResetPassword { get; set; }
     }
 
     public class ManageLoginsViewModel

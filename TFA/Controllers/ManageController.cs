@@ -65,6 +65,20 @@ namespace TFA.Controllers
 
             var userId = User.Identity.GetUserId();
             ApplicationUser user = await UserManager.FindByIdAsync(userId);
+
+            DateTime serverDate = DateTime.Now;
+            var diff = user.PasswordResetDate.Subtract(serverDate);
+            if (diff.Days > 0 && diff.Days < 15)
+            {
+
+            }
+            else if (diff.Days < 0)
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+                return RedirectToAction("PasswordExpired", "Account", new { Email = user.Email });
+            }
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -72,7 +86,8 @@ namespace TFA.Controllers
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                DaysToResetPassword = diff.Days
             };
             return View(model);
         }

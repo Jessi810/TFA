@@ -22,6 +22,10 @@
                 @Html.ActionLink("Create", "SetPassword")
             }
             ]
+            @if (Model.DaysToResetPassword > 0 && Model.DaysToResetPassword < 15)
+            {
+                <text>Your password will reset in @Model.DaysToResetPassword days</text>
+            }
         </dd>
         <dt>External Logins:</dt>
         <dd>
