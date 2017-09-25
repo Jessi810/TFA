@@ -305,6 +305,7 @@
     <Content Include="Scripts\wrapper.js.ejs" />
     <Content Include="Views\Account\PasswordExpiredConfirmation.cshtml" />
     <Content Include="Views\Account\AddImagePassword.cshtml" />
+    <Content Include="Views\Account\ChangeImagePassword.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

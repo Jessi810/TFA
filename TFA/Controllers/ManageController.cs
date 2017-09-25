@@ -62,6 +62,7 @@ namespace TFA.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : message == ManageMessageId.AddImagePasswordSuccess ? "Your image password was added."
+                : message == ManageMessageId.ChangeImagePasswordSuccess ? "Your image password has been changed."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -458,7 +459,8 @@ namespace TFA.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             Error,
-            AddImagePasswordSuccess
+            AddImagePasswordSuccess,
+            ChangeImagePasswordSuccess
         }
 
 #endregion

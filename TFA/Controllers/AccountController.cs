@@ -59,8 +59,44 @@ namespace TFA.Controllers
         }
 
         //
+        // GET: /Account/ChangeImagePassword
+        public async Task<ActionResult> ChangeImagePassword()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            return View(img.Images.ToList());
+        }
+
+        //
+        // POST: /Account/ChangeImagePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeImagePassword(AddImagePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(img.Images.ToList());
+            }
+
+            if (model.SerialHash == null)
+            {
+                ViewBag.Message = "Please select an images to login";
+                return View(img.Images.ToList());
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            user.SerialHash = model.SerialHash;
+            await UserManager.UpdateAsync(user);
+
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangeImagePasswordSuccess });
+        }
+
+        //
         // GET: /Account/AddImagePassword
-        [AllowAnonymous]
         public async Task<ActionResult> AddImagePassword()
         {
             ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -75,7 +111,6 @@ namespace TFA.Controllers
         //
         // POST: /Account/AddImagePassword
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddImagePassword(AddImagePasswordViewModel model)
         {
