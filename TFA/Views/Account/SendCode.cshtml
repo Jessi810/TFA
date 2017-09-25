@@ -9,15 +9,15 @@
     <h4>Send verification code</h4>
     <hr />
     <div class="row">
-        <label class="col-md-12">Select Authentication Provider:</label>
-        <div class="col-md-12">
+        <label class="col-xs-12">Select Authentication Provider:</label>
+        <div class="col-xs-12">
             @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers, new { @class = "btn btn-default" })
             
         </div>
     </div>
 
     <div class="form-group margin-top-24">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <input type="submit" value="Send code" class="btn btn-success" />
         </div>
     </div>
