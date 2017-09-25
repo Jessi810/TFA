@@ -72,7 +72,7 @@
         <dt>Two-Factor Authentication:</dt>
         <dd>
             <label class="slideThree">
-                <input type="checkbox" value="None" id="slideThree" name="check" checked />
+                <input type="checkbox" value="None" id="slideThree" name="check" />
                 <label for="slideThree"></label>
             </label>
             @if (Model.TwoFactor)
@@ -80,9 +80,9 @@
                 using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
-                    <text>Enabled
-                    <input type="submit" value="Disable" class="btn btn-link" />
-                    </text>
+                    <div hidden>
+                        <input type="submit" id="d2fa" value="Disable" class="btn btn-link" />
+                    </div>
                 }
             }
             else
@@ -90,11 +90,31 @@
                 using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
-                    <text>Disabled
-                    <input type="submit" value="Enable" class="btn btn-link" />
-                    </text>
+                    <div hidden>
+                        <input type="submit" id="e2fa" value="Enable" class="btn btn-link" />
+                    </div>
                 }
             }
         </dd>
     </dl>
 </div>
+
+@section Scripts
+{
+    <script>
+        $('#slideThree:checkbox').change(function () {
+            // this will contain a reference to the checkbox
+            if (this.checked) {
+                // the checkbox is now checked
+                $('#e2fa').click();
+            } else {
+                // the checkbox is now no longer checked
+                $('#d2fa').click();
+            }
+        });
+
+        window.onload = function setSlideThreeState() {
+            $("#slideThree").prop('checked', @Model.TwoFactor.ToString().ToLower());
+        }
+    </script>
+}
