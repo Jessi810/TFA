@@ -81,7 +81,7 @@ namespace TFA.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -90,6 +90,11 @@ namespace TFA.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone number")]
+        [RegularExpression(pattern: "^[+]63[0-9]{10}$", ErrorMessage = "Invalid phone number format")]
+        public string PhoneNumber { get; set; }
     }
 
     public class ResetPasswordViewModel

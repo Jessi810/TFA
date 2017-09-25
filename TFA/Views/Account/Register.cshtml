@@ -27,6 +27,12 @@
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-12" })
+        <div class="col-md-12">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @Value = "+63" })
+        </div>
+    </div>
     <div class="form-group margin-top-24">
         <div class="col-md-12">
             <input type="submit" class="btn btn-success" value="Register" />
