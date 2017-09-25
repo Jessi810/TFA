@@ -89,7 +89,8 @@ namespace TFA.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 DaysToResetPassword = diff.Days,
-                ThreeFactorEnabled = user.ThreeFactorEnabled
+                ThreeFactorEnabled = user.ThreeFactorEnabled,
+                ImagePasswordSet = user.SerialHash == null ? false : true
             };
             return View(model);
         }
