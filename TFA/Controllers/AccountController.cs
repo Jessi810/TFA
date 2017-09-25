@@ -341,15 +341,19 @@ namespace TFA.Controllers
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
             var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
             switch (result)
             {
                 case SignInStatus.Success:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
-                    return RedirectToAction("ImageLogin", new { Email = model.Email });
+                    if (user.ThreeFactorEnabled)
+                    {
+                        return RedirectToAction("ImageLogin", new { Email = model.Email });
+                    }
 
-                    //return RedirectToLocal(model.ReturnUrl);
+                    return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
-                    ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
                     var sl = new SecLog
                     {
