@@ -6,145 +6,179 @@
 <h2>@ViewBag.Title</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
-<div>
-    <h4>Account details</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
+<h4>Account settings and details</h4>
+<hr />
+<div class="row is-flex">
+    <div class="col-xs-12 col-md-4" style="border: 2px groove #00BC8C; padding: 12px;">
+        <div class="col-xs-12" style="margin-top: 12px;">
+            <label>Account Settings:</label>
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Email:</label>
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Password:</label>
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                @Html.ActionLink("Change your password", "ChangePassword", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                @Html.ActionLink("Create password", "SetPassword", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
             }
-            ]
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
             @if (Model.DaysToResetPassword > 0 && Model.DaysToResetPassword < 15)
             {
-                <text>Your password will reset in @Model.DaysToResetPassword days</text>
+                <span class="glyphicon glyphicon-info-sign"></span><text>  Your password will reset in @Model.DaysToResetPassword days</text>
             }
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
-          
-        <dt>Phone Number:</dt>
-        <dd>
-            @(Model.PhoneNumber ?? "None")
-            @if (Model.PhoneNumber != null)
-            {
-                <br />
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-                using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-                }
-            }
-            else
-            {
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Add phone number", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-            }
-        </dd>
+        </div>
+    </div>
 
-        <dt>Phone number confirmed:</dt>
-        <dd>
-            @if (Model.PhoneNumberConfirmed)
-            {
-                <text>Yes</text>
-            }
-            else
-            {
-                <text>No</text>
-                using (Html.BeginForm("VerifyCurrentPhoneNumber", "Manage", new { PhoneNumber = Model.PhoneNumber }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <text>[&nbsp;&nbsp;<input type="submit" value="Verify" class="btn-link" />&nbsp;&nbsp;]</text>
-}
-}
-        </dd>
-        
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
+    <div class="col-xs-12 col-md-4" style="border: 2px groove #00BC8C; padding: 12px;">
+        <div class="col-xs-12" style="margin-top: 12px;">
             <label class="slideThree">
                 <input type="checkbox" value="None" id="slideThree" name="check" />
                 <label for="slideThree"></label>
             </label>
-            @if (Model.TwoFactor)
+            <label>OTP Authentication</label>
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Phone Number:</label>
+            @(Model.PhoneNumber ?? "None")
+            @if (Model.PhoneNumber != null)
             {
-                using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div hidden>
-                        <input type="submit" id="d2fa" value="Disable" class="btn btn-link" />
-                    </div>
-                }
+                <br />
+                <div class="col-xs-6">
+                    @Html.ActionLink("Change", "AddPhoneNumber", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
+                </div>
+                <div class="col-xs-6">
+                    @using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="submit" value="Remove" class="btn btn-default btn-sm" style="width: 100%;" />
+                    }
+                </div>
             }
             else
             {
-                using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @Html.ActionLink("Add phone number", "AddPhoneNumber", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
+            }
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            @if (!Model.PhoneNumber.IsEmpty())
+            {
+                <label>Phone Number Verified:</label>
+                if (Model.PhoneNumberConfirmed)
                 {
-                    @Html.AntiForgeryToken()
-                    <div hidden>
-                        <input type="submit" id="e2fa" value="Enable" class="btn btn-link" />
+                    <text>Yes</text>
+                    <br />
+                    <span class="glyphicon glyphicon-info-sign"></span><text>  Verified number can be used in sending codes during login</text>
+                }
+                else
+                {
+                    <text>No</text>
+                    <div class="col-xs-6">
+                        @using (Html.BeginForm("VerifyCurrentPhoneNumber", "Manage", new { PhoneNumber = Model.PhoneNumber }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="submit" value="Verify" class="btn btn-default btn-sm" style="width: 100%;" />
+                        }
                     </div>
                 }
             }
-        </dd>
+        </div>
+    </div>
 
-        <dt>Three-Factor Authentication:</dt>
-        <dd>
+    <div class="col-xs-12 col-md-4" style="border: 2px groove #00BC8C; padding: 12px;">
+        <div class="col-xs-12" style="margin-top: 12px;">
             <label class="slideThree">
                 <input type="checkbox" value="None" id="slideThree2" name="check" />
                 <label for="slideThree2"></label>
             </label>
-            @if (Model.ThreeFactorEnabled)
-            {
-                using (Html.BeginForm("DisableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div hidden>
-                        <input type="submit" id="d3fa" value="Disable" class="btn btn-link" />
-                    </div>
-                }
-            }
-            else
-            {
-                using (Html.BeginForm("EnableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div hidden>
-                        <input type="submit" id="e3fa" value="Enable" class="btn btn-link" />
-                    </div>
-                }
-            }
-        </dd>
+            <label>Image Authentication</label>
+        </div>
 
-        <dt>Image Authentication Set:</dt>
-        <dd>
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Have Image Password:</label>
             @if (Model.ImagePasswordSet)
             {
-                <text>Yes</text><br />
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "ChangeImagePassword", "Account")&nbsp;&nbsp;]</text>
+                <text>Yes</text>
+                <br />
+                <div class="col-xs-6">
+                    @Html.ActionLink("Change", "ChangeImagePassword", "Account", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
+                </div>
                 using (Html.BeginForm("RemoveImagePassword", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
-                    <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                    <div class="col-xs-6">
+                        <input type="submit" value="Remove" class="btn btn-default btn-sm" style="width: 100%;" />
+                    </div>
                 }
             }
             else
             {
                 <text>No</text>
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Add image password", "AddImagePassword", "Account")&nbsp;&nbsp;]</text>
+                @Html.ActionLink("Add image password", "AddImagePassword", "Account", "", new { @class = "btn btn-default btn-sm", style = "width: 100%;" })
             }
-        </dd>
-    </dl>
+        </div>
+    </div>
 </div>
+
+@if (Model.TwoFactor)
+{
+    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div hidden>
+            <input type="submit" id="d2fa" value="Disable" class="btn btn-link" />
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div hidden>
+            <input type="submit" id="e2fa" value="Enable" class="btn btn-link" />
+        </div>
+    }
+}
+
+@if (Model.ThreeFactorEnabled)
+{
+    using (Html.BeginForm("DisableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div hidden>
+            <input type="submit" id="d3fa" value="Disable" class="btn btn-link" />
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm("EnableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div hidden>
+            <input type="submit" id="e3fa" value="Enable" class="btn btn-link" />
+        </div>
+    }
+}
+
+@*<dl class="dl-horizontal">
+    <dt>External Logins:</dt>
+    <dd>
+        @Model.Logins.Count [
+        @Html.ActionLink("Manage", "ManageLogins") ]
+    </dd>
+</dl>*@
 
 @section Scripts
 {
