@@ -46,5 +46,10 @@ textarea {
     border-style: groove;
     min-height: 500px;
     padding: 40px;
-    opacity: 0.85
+    opacity: 0.85;
+}
+
+.body-bg-img {
+    /*background-image: url('~/Content/img/neonlightballoons.jpg');*/
+    background-image: url('img/neonlightballoons.jpg');
 }

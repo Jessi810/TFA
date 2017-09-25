@@ -224,6 +224,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\flags%402x.png" />
     <Content Include="Content\img\flags.png" />
+    <Content Include="Content\img\neonlightballoons.jpg" />
     <Content Include="Content\intlTelInput.css" />
     <Content Include="Content\MyImages\Abduction.png" />
     <Content Include="Content\MyImages\Aboard.jpg" />
