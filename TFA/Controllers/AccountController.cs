@@ -280,7 +280,8 @@ namespace TFA.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+                    PasswordResetDate = DateTime.Now.AddDays(90)
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -383,6 +384,8 @@ namespace TFA.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
+                user.PasswordResetDate = DateTime.Now.AddDays(90);
+                await UserManager.UpdateAsync(user);
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);

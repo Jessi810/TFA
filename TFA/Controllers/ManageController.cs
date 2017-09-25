@@ -258,6 +258,8 @@ namespace TFA.Controllers
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
+                    user.PasswordResetDate = DateTime.Now.AddDays(90);
+                    await UserManager.UpdateAsync(user);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -287,6 +289,8 @@ namespace TFA.Controllers
                     var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                     if (user != null)
                     {
+                        user.PasswordResetDate = DateTime.Now.AddDays(90);
+                        await UserManager.UpdateAsync(user);
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
                     return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
