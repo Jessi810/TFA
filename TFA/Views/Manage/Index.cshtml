@@ -15,10 +15,6 @@
         </div>
 
         <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
-            <label>Email:&nbsp;</label>@Model.Email
-        </div>
-
-        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
             <label>Password:</label>
             @if (Model.HasPassword)
             {
@@ -45,6 +41,27 @@
                 <label for="slideThree"></label>
             </label>
             <label>OTP Authentication</label>
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Email:&nbsp;</label>@Model.Email
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Email Verified:&nbsp;</label>
+            @if (@Model.EmailConfirmed)
+            {
+                <text>Yes</text>
+            }
+            else
+            {
+                <text>No</text>
+                using (Html.BeginForm("SendConfirmEmail", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Confirm email" class="btn btn-default btn-sm" style="width: 100%;" />
+                }
+            }
         </div>
 
         <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
@@ -78,7 +95,7 @@
                 {
                     <text>Yes</text>
                     <br />
-                    <span class="glyphicon glyphicon-info-sign"></span><text>  Verified number can be used in sending codes during login</text>
+                    <span class="glyphicon glyphicon-info-sign"></span><text>  Verified <i>email</i> and <i>phone number</i> can be used in sending codes during login</text>
                 }
                 else
                 {

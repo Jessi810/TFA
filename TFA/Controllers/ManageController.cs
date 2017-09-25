@@ -132,7 +132,8 @@ namespace TFA.Controllers
                 DaysToResetPassword = diff.Days,
                 ThreeFactorEnabled = user.ThreeFactorEnabled,
                 ImagePasswordSet = user.SerialHash == null ? false : true,
-                Email = user.Email
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed
             };
             return View(model);
         }
