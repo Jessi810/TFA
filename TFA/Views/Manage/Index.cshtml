@@ -44,8 +44,25 @@
             }
             else
             {
-                <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")</text>
+                <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")&nbsp;&nbsp;]</text>
             }
+        </dd>
+
+        <dt>Phone number confirmed:</dt>
+        <dd>
+            @if (Model.PhoneNumberConfirmed)
+            {
+                <text>Yes</text>
+            }
+            else
+            {
+                <text>No</text>
+                using (Html.BeginForm("VerifyCurrentPhoneNumber", "Manage", new { PhoneNumber = Model.PhoneNumber }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>[&nbsp;&nbsp;<input type="submit" value="Verify" class="btn-link" />&nbsp;&nbsp;]</text>
+}
+}
         </dd>
         
         <dt>Two-Factor Authentication:</dt>

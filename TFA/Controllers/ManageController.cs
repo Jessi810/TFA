@@ -64,13 +64,15 @@ namespace TFA.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            ApplicationUser user = await UserManager.FindByIdAsync(userId);
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed
             };
             return View(model);
         }
@@ -192,6 +194,26 @@ namespace TFA.Controllers
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "Failed to verify phone");
             return View(model);
+        }
+
+        //
+        // POST: /Manage/AddPhoneNumber
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyCurrentPhoneNumber(string phoneNumber)
+        {
+            // Generate the token and send it
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            if (UserManager.SmsService != null)
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = phoneNumber,
+                    Body = "Your security code is: " + code
+                };
+                await UserManager.SmsService.SendAsync(message);
+            }
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber });
         }
 
         //
