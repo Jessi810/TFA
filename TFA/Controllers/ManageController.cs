@@ -80,7 +80,7 @@ namespace TFA.Controllers
             {
                 user.Email = model.Email;
                 await UserManager.UpdateAsync(user);
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeEmailSuccess });
             }
             else
             {
@@ -102,6 +102,7 @@ namespace TFA.Controllers
                 : message == ManageMessageId.AddImagePasswordSuccess ? "Your image password was added."
                 : message == ManageMessageId.ChangeImagePasswordSuccess ? "Your image password has been changed."
                 : message == ManageMessageId.RemoveImagePasswordSuccess ? "Your image password was removed."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
                 : "";
 
              var userId = User.Identity.GetUserId();
@@ -517,7 +518,8 @@ namespace TFA.Controllers
             Error,
             AddImagePasswordSuccess,
             ChangeImagePasswordSuccess,
-            RemoveImagePasswordSuccess
+            RemoveImagePasswordSuccess,
+            ChangeEmailSuccess
         }
 
 #endregion
