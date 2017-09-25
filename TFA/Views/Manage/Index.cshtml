@@ -96,6 +96,34 @@
                 }
             }
         </dd>
+
+        <dt>Three-Factor Authentication:</dt>
+        <dd>
+            <label class="slideThree">
+                <input type="checkbox" value="None" id="slideThree2" name="check" />
+                <label for="slideThree2"></label>
+            </label>
+            @if (Model.ThreeFactorEnabled)
+            {
+                using (Html.BeginForm("DisableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div hidden>
+                        <input type="submit" id="d3fa" value="Disable" class="btn btn-link" />
+                    </div>
+                }
+            }
+            else
+            {
+                using (Html.BeginForm("EnableThreeFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div hidden>
+                        <input type="submit" id="e3fa" value="Enable" class="btn btn-link" />
+                    </div>
+                }
+            }
+        </dd>
     </dl>
 </div>
 
@@ -113,8 +141,20 @@
             }
         });
 
+        $('#slideThree2:checkbox').change(function () {
+            // this will contain a reference to the checkbox
+            if (this.checked) {
+                // the checkbox is now checked
+                $('#e3fa').click();
+            } else {
+                // the checkbox is now no longer checked
+                $('#d3fa').click();
+            }
+        });
+
         window.onload = function setSlideThreeState() {
             $("#slideThree").prop('checked', @Model.TwoFactor.ToString().ToLower());
+            $("#slideThree2").prop('checked', @Model.ThreeFactorEnabled.ToString().ToLower());
         }
     </script>
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TFA.Models
 {
@@ -21,6 +22,8 @@ namespace TFA.Models
 
         public string SerialHash { get; set; }
         public DateTime PasswordResetDate { get; set; }
+        [Required]
+        public bool ThreeFactorEnabled { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

@@ -88,7 +88,8 @@ namespace TFA.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                DaysToResetPassword = diff.Days
+                DaysToResetPassword = diff.Days,
+                ThreeFactorEnabled = user.ThreeFactorEnabled
             };
             return View(model);
         }
@@ -173,6 +174,38 @@ namespace TFA.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+            return RedirectToAction("Index", "Manage");
+        }
+
+        //
+        // POST: /Manage/EnableThreeFactorAuthentication
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EnableThreeFactorAuthentication()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                user.ThreeFactorEnabled = true;
+                await UserManager.UpdateAsync(user);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+            return RedirectToAction("Index", "Manage");
+        }
+
+        //
+        // POST: /Manage/DisableThreeFactorAuthentication
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DisableThreeFactorAuthentication()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                user.ThreeFactorEnabled = false;
+                await UserManager.UpdateAsync(user);
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", "Manage");
