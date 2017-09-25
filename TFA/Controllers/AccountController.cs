@@ -167,6 +167,18 @@ namespace TFA.Controllers
                     secLog.SecLogs.Add(sl);
                     await secLog.SaveChangesAsync();
 
+                    if (UserManager.SmsService != null)
+                    {
+                        var message = new IdentityMessage
+                        {
+                            Destination = user.PhoneNumber,
+                            Body = "Your account " + model.Email + " has been locked out because of failed login attempt."
+                        };
+                        await UserManager.SmsService.SendAsync(message);
+                    }
+
+                    await UserManager.SendEmailAsync(user.Id, "Account Lockout", "Your account has been lockout because of failed login attempt.");
+
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe, Email = model.Email });
@@ -215,7 +227,7 @@ namespace TFA.Controllers
 
                     //return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
-                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+                    ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
                     var sl = new SecLog
                     {
@@ -226,6 +238,18 @@ namespace TFA.Controllers
 
                     secLog.SecLogs.Add(sl);
                     await secLog.SaveChangesAsync();
+
+                    if (UserManager.SmsService != null)
+                    {
+                        var message = new IdentityMessage
+                        {
+                            Destination = user.PhoneNumber,
+                            Body = "Your account " + model.Email + " has been locked out because of failed login attempt."
+                        };
+                        await UserManager.SmsService.SendAsync(message);
+                    }
+
+                    await UserManager.SendEmailAsync(user.Id, "Account Lockout", "Your account has been lockout because of failed login attempt.");
 
                     return View("Lockout");
                 case SignInStatus.Failure:
