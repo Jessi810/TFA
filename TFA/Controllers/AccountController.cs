@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using TFA.Models;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using static TFA.Controllers.ManageController;
 
 namespace TFA.Controllers
 {
@@ -55,6 +56,45 @@ namespace TFA.Controllers
             {
                 _userManager = value;
             }
+        }
+
+        //
+        // GET: /Account/AddImagePassword
+        [AllowAnonymous]
+        public async Task<ActionResult> AddImagePassword()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            return View(img.Images.ToList());
+        }
+
+        //
+        // POST: /Account/AddImagePassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddImagePassword(AddImagePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(img.Images.ToList());
+            }
+
+            if (model.SerialHash == null)
+            {
+                ViewBag.Message = "Please select an images to login";
+                return View(img.Images.ToList());
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            user.SerialHash = model.SerialHash;
+            await UserManager.UpdateAsync(user);
+
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.AddImagePasswordSuccess });
         }
 
         //

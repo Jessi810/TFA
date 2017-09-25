@@ -12,6 +12,12 @@ namespace TFA.Models
         public string ImageSerial { get; set; }
     }
 
+    public class AddImagePasswordViewModel
+    {
+        [Required]
+        public string SerialHash { get; set; }
+    }
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
