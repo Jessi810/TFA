@@ -160,19 +160,30 @@ namespace TFA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ImageLogin(ImageLoginViewModel model)
         {
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (await UserManager.IsLockedOutAsync(user.Id))
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+                return View("Lockout");
+            }
+
             if (!ModelState.IsValid)
             {
+                await UserManager.AccessFailedAsync(user.Id);
+
                 return View(img.Images.ToList());
             }
 
             if (model.ImageSerial == null)
             {
+                await UserManager.AccessFailedAsync(user.Id);
+
                 TempData["UserEmail"] = model.Email;
                 ViewBag.ImageLoginMessage = "Please select an images to login";
                 return View(img.Images.ToList());
             }
-
-            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 
             if (user.SerialHash.Equals(model.ImageSerial))
             {
@@ -180,6 +191,8 @@ namespace TFA.Controllers
             }
             else
             {
+                await UserManager.AccessFailedAsync(user.Id);
+
                 TempData["UserEmail"] = model.Email;
                 ViewBag.ImageLoginMessage = "Invalid images selected. Please try again.";
                 return View(img.Images.ToList());
