@@ -89,7 +89,13 @@ namespace TFA.Controllers
             }
 
             ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            user.SerialHash = model.SerialHash;
+
+            // Encrypt serials
+            var key = Helper.SerialImageEncryptor.GeneratePassword(16);
+            var serialHash = Helper.SerialImageEncryptor.EncodePassword(model.SerialHash, key);
+
+            user.SerialHash = serialHash;
+            user.VCode = key;
             await UserManager.UpdateAsync(user);
 
             return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangeImagePasswordSuccess });
