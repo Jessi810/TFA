@@ -27,6 +27,12 @@
         </div>
 
         <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Log off:</label>
+            <br />
+            @Html.Partial("_LogoffPartial")
+        </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
             @if (Model.DaysToResetPassword > 0 && Model.DaysToResetPassword < 15)
             {
                 <span class="glyphicon glyphicon-info-sign"></span><text>  Your password will reset in @Model.DaysToResetPassword days</text>

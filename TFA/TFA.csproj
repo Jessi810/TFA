@@ -233,21 +233,18 @@
     <Content Include="Content\img\neonlightsquare.jpg" />
     <Content Include="Content\intlTelInput.css" />
     <Content Include="Content\MyImages\Abduction.png" />
-    <Content Include="Content\MyImages\Aboard.jpg" />
-    <Content Include="Content\MyImages\Armageddon.jpg" />
-    <Content Include="Content\MyImages\Bash Blast.png" />
-    <Content Include="Content\MyImages\Bleak Blaze.jpg" />
-    <Content Include="Content\MyImages\Blue Abyss.jpg" />
-    <Content Include="Content\MyImages\City of Emerald.jpg" />
-    <Content Include="Content\MyImages\Cliff House.png" />
-    <Content Include="Content\MyImages\Cloudy Canvas.jpg" />
-    <Content Include="Content\MyImages\Cold World.jpg" />
-    <Content Include="Content\MyImages\Curved Canvas.jpg" />
-    <Content Include="Content\MyImages\Dazzled Horizon.jpg" />
-    <Content Include="Content\MyImages\Eye Oh.png" />
-    <Content Include="Content\MyImages\Guard the Castle.png" />
-    <Content Include="Content\MyImages\Kinetic Theory.jpg" />
-    <Content Include="Content\MyImages\Let%27s Go Home.jpg" />
+    <Content Include="Content\MyImages\bashblast.png" />
+    <Content Include="Content\MyImages\bleakblaze.jpg" />
+    <Content Include="Content\MyImages\blueabyss.jpg" />
+    <Content Include="Content\MyImages\cityofemerald.jpg" />
+    <Content Include="Content\MyImages\cliffHouse.png" />
+    <Content Include="Content\MyImages\cloudycanvas.jpg" />
+    <Content Include="Content\MyImages\coldworld.jpg" />
+    <Content Include="Content\MyImages\curvedcanvas.jpg" />
+    <Content Include="Content\MyImages\dazzledhorizon.jpg" />
+    <Content Include="Content\MyImages\eyeoh.png" />
+    <Content Include="Content\MyImages\guardthecastle.png" />
+    <Content Include="Content\MyImages\kinetictheory.jpg" />
     <Content Include="Content\responsive-bs-carousel.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -312,6 +309,7 @@
     <Content Include="Views\Manage\ChangeEmail.cshtml" />
     <Content Include="Views\Home\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
+    <Content Include="Views\Shared\_LogoffPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
