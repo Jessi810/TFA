@@ -248,6 +248,7 @@
     <Content Include="Content\MyImages\Guard the Castle.png" />
     <Content Include="Content\MyImages\Kinetic Theory.jpg" />
     <Content Include="Content\MyImages\Let%27s Go Home.jpg" />
+    <Content Include="Content\responsive-bs-carousel.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -309,6 +310,8 @@
     <Content Include="Views\Account\AddImagePassword.cshtml" />
     <Content Include="Views\Account\ChangeImagePassword.cshtml" />
     <Content Include="Views\Manage\ChangeEmail.cshtml" />
+    <Content Include="Views\Home\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_LayoutHome.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -362,6 +362,11 @@ namespace TFA.Controllers
                         return RedirectToAction("ImageLogin", new { Email = model.Email });
                     }
 
+                    if (model.ReturnUrl == null)
+                    {
+                        return RedirectToAction("Index", "Manage");
+                    }
+
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);

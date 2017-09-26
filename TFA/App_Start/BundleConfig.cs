@@ -28,6 +28,9 @@ namespace TFA
                       "~/Content/Site.css",
                       "~/Content/checkbox-styles.css"
                       /*"~/Content/equal-height-columns.css"*/));
+
+            bundles.Add(new StyleBundle("~/Content/responsive-bs-carousel").Include(
+                      "~/Content/responsive-bs-carousel.css"));
         }
     }
 }
