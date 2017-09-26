@@ -281,6 +281,11 @@ namespace TFA.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    user = await UserManager.FindByEmailAsync(model.Email);
+                    if (!user.TwoFactorEnabled && user.ThreeFactorEnabled)
+                    {
+                        return RedirectToAction("ImageLogin", new { Email = model.Email });
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
