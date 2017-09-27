@@ -16,11 +16,23 @@
             @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
         </div>
     </div>
+
+    if (Model.Provider.ToLower().Contains("email"))
+    {
+        <span class="glyphicon glyphicon-info-sign"></span>
+        <text>&nbsp;&nbsp;Check your email for verification code.</text>
+    }
+    else if (Model.Provider.ToLower().Contains("phone"))
+    {
+        <span class="glyphicon glyphicon-info-sign"></span>
+        <text>&nbsp;&nbsp;Check your phone for verification code.</text>
+    }
+
     <div class="form-group">
         <div class="col-md-12">
             <div class="checkbox">
-                @Html.CheckBoxFor(m => m.RememberBrowser)
-                @Html.LabelFor(m => m.RememberBrowser)
+                @Html.CheckBoxFor(m => m.RememberBrowser, new { style = "margin-left: 12px;" })
+                @Html.LabelFor(m => m.RememberBrowser, new { style = "margin-left: 12px;" })
             </div>
         </div>
     </div>
@@ -30,6 +42,9 @@
             <input type="submit" class="btn btn-success" value="Verify code" />
         </div>
     </div>
+
+    <span class="glyphicon glyphicon-info-sign"></span>
+    <text>&nbsp;&nbsp;Check "remember this browser" if you want to bypass 2nd and 3rd authentication in this browser.</text>
 }
 
 @section Scripts {

@@ -27,12 +27,17 @@
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
+    <span class="glyphicon glyphicon-info-sign"></span>
+    <text>&nbsp;&nbsp;Password must be at least 8 characters, contains upper and lower case, number and special character.</text>
+    <br /><br />
     <div class="form-group">
         @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-12" })
         <div class="col-md-12">
             @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @Value = "+63" })
         </div>
     </div>
+    <span class="glyphicon glyphicon-info-sign"></span>
+    <text>&nbsp;&nbsp;Format should start with "+63" followed by 10-digit number. Phone number is optional.</text>
     <div class="form-group margin-top-24">
         <div class="col-xs-12">
             <input type="submit" class="btn btn-success" value="Register" />
