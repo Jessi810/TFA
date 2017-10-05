@@ -265,6 +265,11 @@ namespace TFA.Controllers
             }
 
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
             DateTime serverDate = DateTime.Now;
             var diff = user.PasswordResetDate.Subtract(serverDate);
             if (diff.Days < 0)
@@ -286,12 +291,11 @@ namespace TFA.Controllers
                     {
                         return RedirectToAction("ImageLogin", new { Email = model.Email });
                     }
-                    if (!String.IsNullOrEmpty(returnUrl))
+                    if (String.IsNullOrEmpty(returnUrl))
                     {
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction("Index", "Manage");
                     }
-
-                    return RedirectToAction("Index", "Manage");
+                    return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
 

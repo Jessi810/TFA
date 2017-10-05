@@ -105,8 +105,12 @@ namespace TFA.Controllers
                 : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
                 : "";
 
-             var userId = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
             ApplicationUser user = await UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             DateTime serverDate = DateTime.Now;
             var diff = user.PasswordResetDate.Subtract(serverDate);
