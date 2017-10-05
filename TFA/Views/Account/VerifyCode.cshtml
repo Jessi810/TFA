@@ -28,7 +28,7 @@
         <text>&nbsp;&nbsp;Check your phone for verification code.</text>
     }
 
-    <div class="form-group">
+    <div class="form-group hidden">
         <div class="col-md-12">
             <div class="checkbox">
                 @Html.CheckBoxFor(m => m.RememberBrowser, new { style = "margin-left: 12px;" })
@@ -43,8 +43,8 @@
         </div>
     </div>
 
-    <span class="glyphicon glyphicon-info-sign"></span>
-    <text>&nbsp;&nbsp;Check "remember this browser" if you want to bypass 2nd and 3rd authentication in this browser.</text>
+    @*<span class="glyphicon glyphicon-info-sign"></span>
+    <text>&nbsp;&nbsp;Check "remember this browser" if you want to bypass 2nd and 3rd authentication in this browser.</text>*@
 }
 
 @section Scripts {

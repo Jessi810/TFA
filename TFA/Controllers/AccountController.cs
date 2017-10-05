@@ -265,6 +265,11 @@ namespace TFA.Controllers
             }
 
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
             DateTime serverDate = DateTime.Now;
             var diff = user.PasswordResetDate.Subtract(serverDate);
             if (diff.Days < 0)
@@ -285,6 +290,10 @@ namespace TFA.Controllers
                     if (!user.TwoFactorEnabled && user.ThreeFactorEnabled)
                     {
                         return RedirectToAction("ImageLogin", new { Email = model.Email });
+                    }
+                    if (String.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToAction("Index", "Manage");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -351,7 +360,7 @@ namespace TFA.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: true);
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
             switch (result)
             {
