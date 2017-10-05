@@ -1,0 +1,10 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Clear2FARememberedBrowser", "Manage", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="submit" value="Clear Remembered Browser" class="btn btn-default btn-sm" style="width: 100%;" />
+    }
+}

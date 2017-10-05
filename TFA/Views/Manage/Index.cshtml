@@ -38,6 +38,12 @@
                 <span class="glyphicon glyphicon-info-sign"></span><text>  Your password will reset in @Model.DaysToResetPassword days</text>
             }
         </div>
+
+        <div class="col-xs-12" style="margin-top: 12px; margin-left: 20px;">
+            <label>Reset 3FA:</label>
+            <br />
+            @Html.Partial("_Clear2FA")
+        </div>
     </div>
 
     <div class="col-xs-12 col-md-4" style="border: 2px groove #00BC8C; padding: 12px;">

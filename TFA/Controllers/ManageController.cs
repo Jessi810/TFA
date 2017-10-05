@@ -51,6 +51,16 @@ namespace TFA.Controllers
         }
 
         //
+        // POST: /Account/Clear2FARememberedBrowser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Clear2FARememberedBrowser()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.Clear2FASuccess });
+        }
+
+        //
         // GET: /Manage/ChangeEmail
         public async Task<ActionResult> ChangeEmail()
         {
@@ -103,6 +113,7 @@ namespace TFA.Controllers
                 : message == ManageMessageId.ChangeImagePasswordSuccess ? "Your image password has been changed."
                 : message == ManageMessageId.RemoveImagePasswordSuccess ? "Your image password was removed."
                 : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
+                : message == ManageMessageId.Clear2FASuccess ? "Remembered browser has been cleared. When you login again, you'll be asked again for 2nd and 3rd authentication credentials."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -524,7 +535,8 @@ namespace TFA.Controllers
             AddImagePasswordSuccess,
             ChangeImagePasswordSuccess,
             RemoveImagePasswordSuccess,
-            ChangeEmailSuccess
+            ChangeEmailSuccess,
+            Clear2FASuccess
         }
 
 #endregion
