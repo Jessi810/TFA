@@ -245,6 +245,8 @@
     <Content Include="Content\MyImages\eyeoh.png" />
     <Content Include="Content\MyImages\guardthecastle.png" />
     <Content Include="Content\MyImages\kinetictheory.jpg" />
+    <Content Include="Scripts\bootstrap-show-password.js" />
+    <Content Include="Scripts\bootstrap-show-password.min.js" />
     <Content Include="Scripts\pwstrength-bootstrap.js" />
     <Content Include="Content\responsive-bs-carousel.css" />
     <Content Include="favicon.ico" />
