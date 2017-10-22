@@ -77,14 +77,21 @@ namespace TFA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeImagePassword(AddImagePasswordViewModel model)
         {
+            if (model.SerialHash == null)
+            {
+                //ViewBag.Message = "Please select an images to login";
+                ModelState.AddModelError("", "Please select an images to login");
+                return View(img.Images.ToList());
+            }
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("", "Invalid. Please try again.");
                 return View(img.Images.ToList());
             }
 
-            if (model.SerialHash == null)
+            if (model.SerialHash.Length < 8)
             {
-                ViewBag.Message = "Please select an images to login";
+                ModelState.AddModelError("", "Please select at least 4 images");
                 return View(img.Images.ToList());
             }
 
@@ -120,14 +127,21 @@ namespace TFA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddImagePassword(AddImagePasswordViewModel model)
         {
+            if (model.SerialHash == null)
+            {
+                //ViewBag.Message = "Please select an images to login";
+                ModelState.AddModelError("", "Please select an images to login");
+                return View(img.Images.ToList());
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(img.Images.ToList());
             }
 
-            if (model.SerialHash == null)
+            if (model.SerialHash.Length < 8)
             {
-                ViewBag.Message = "Please select an images to login";
+                ModelState.AddModelError("", "Please select at least 4 images");
                 return View(img.Images.ToList());
             }
 
