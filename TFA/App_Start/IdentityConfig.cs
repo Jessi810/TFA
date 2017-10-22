@@ -63,11 +63,18 @@ namespace TFA
 
             string senderNumber = ConfigurationManager.AppSettings["TwilioSenderNumber"].ToString();
 
-            var msg = MessageResource.Create(
+            try
+            {
+                var msg = MessageResource.Create(
                 to: new PhoneNumber(message.Destination),
                 from: new PhoneNumber(senderNumber),
                 body: message.Body
                 );
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return Task.FromResult(0);
         }

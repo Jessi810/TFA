@@ -149,8 +149,12 @@ namespace TFA.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ImageLogin(string email)
         {
-            ApplicationUser user = await UserManager.FindByEmailAsync(email);
-            if(user == null)
+            ApplicationUser user;
+            try
+            {
+                user = await UserManager.FindByEmailAsync(email);
+            }
+            catch (Exception e)
             {
                 return View("Error");
             }
@@ -172,7 +176,18 @@ namespace TFA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ImageLogin(ImageLoginViewModel model)
         {
+            if (model.ImageSerial == null)
+            {
+                ModelState.AddModelError("", "Please select an images to continue.");
+                return View(img.Images.ToList());
+            }
+
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Cannot login.");
+                return RedirectToAction("Login");
+            }
 
             if (await UserManager.IsLockedOutAsync(user.Id))
             {
@@ -184,7 +199,7 @@ namespace TFA.Controllers
             if (!ModelState.IsValid)
             {
                 await UserManager.AccessFailedAsync(user.Id);
-
+                ModelState.AddModelError("", "Please select the right images to login");
                 return View(img.Images.ToList());
             }
 
@@ -193,7 +208,8 @@ namespace TFA.Controllers
                 await UserManager.AccessFailedAsync(user.Id);
 
                 TempData["UserEmail"] = model.Email;
-                ViewBag.ImageLoginMessage = "Please select an images to login";
+                //ViewBag.ImageLoginMessage = "Please select the right images to login";
+                ModelState.AddModelError("", "Please select the right images to login");
                 return View(img.Images.ToList());
             }
 
@@ -211,7 +227,8 @@ namespace TFA.Controllers
                 await UserManager.AccessFailedAsync(user.Id);
 
                 TempData["UserEmail"] = model.Email;
-                ViewBag.ImageLoginMessage = "Invalid images selected. Please try again.";
+                //ViewBag.ImageLoginMessage = "Invalid images selected. Please try again.";
+                ModelState.AddModelError("", "Invalid images selected. Please try again.");
                 return View(img.Images.ToList());
             }
         }
@@ -249,18 +266,28 @@ namespace TFA.Controllers
                 return View(model);
             }
 
-            // Google reCaptcha validation
-            var response = Request["g-recaptcha-response"];
-            string secretKey = "6LeP5S0UAAAAAIRNJSYxs4maRDcPA107rwog9fD6";
-            var client = new WebClient();
-            var downloadStringResult = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
-            var obj = JObject.Parse(downloadStringResult);
-            var status = (bool)obj.SelectToken("success");
+            bool status = false;
+            try
+            {
+                // Google reCaptcha validation
+                var response = Request["g-recaptcha-response"];
+                string secretKey = "6LeP5S0UAAAAAIRNJSYxs4maRDcPA107rwog9fD6";
+                var client = new WebClient();
+                var downloadStringResult = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+                var obj = JObject.Parse(downloadStringResult);
+                status = (bool)obj.SelectToken("success");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "No internet connection.");
+                return View(model);
+            }
 
             // Redisplay page if reCaptcha validation failed
             if (!status)
             {
-                ViewBag.RecaptchaMessage = "Google reCaptcha validation failed. Please try again";
+                ViewBag.RecaptchaMessage = "Google reCaptcha validation failed. Please try again.";
+                ModelState.AddModelError("", "Recaptcha validation failed. Please try again.");
                 return View(model);
             }
 
@@ -478,7 +505,7 @@ namespace TFA.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.SentConfirmEmail });
         }
 
         //

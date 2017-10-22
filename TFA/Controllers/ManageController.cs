@@ -113,6 +113,7 @@ namespace TFA.Controllers
                 : message == ManageMessageId.ChangeImagePasswordSuccess ? "Your image password has been changed."
                 : message == ManageMessageId.RemoveImagePasswordSuccess ? "Your image password was removed."
                 : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
+                : message == ManageMessageId.SentConfirmEmail ? "An email verification link has been sent to your email."
                 : message == ManageMessageId.Clear2FASuccess ? "Remembered browser has been cleared. When you login again, you'll be asked again for 2nd and 3rd authentication credentials."
                 : "";
 
@@ -536,7 +537,8 @@ namespace TFA.Controllers
             ChangeImagePasswordSuccess,
             RemoveImagePasswordSuccess,
             ChangeEmailSuccess,
-            Clear2FASuccess
+            Clear2FASuccess,
+            SentConfirmEmail
         }
 
 #endregion

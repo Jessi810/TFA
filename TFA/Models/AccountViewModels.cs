@@ -102,7 +102,7 @@ namespace TFA.Models
 
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone number")]
-        [RegularExpression(pattern: "^[+]63[0-9]{10}$", ErrorMessage = "Invalid phone number format")]
+        [RegularExpression(pattern: "^[+]639[0-9]{9}$", ErrorMessage = "Invalid phone number format")]
         public string PhoneNumber { get; set; }
     }
 
