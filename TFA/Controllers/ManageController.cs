@@ -15,6 +15,7 @@ namespace TFA.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private SecLogContext secLog = new SecLogContext();
 
         public ManageController()
         {
@@ -114,6 +115,7 @@ namespace TFA.Controllers
                 : message == ManageMessageId.RemoveImagePasswordSuccess ? "Your image password was removed."
                 : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
                 : message == ManageMessageId.ImageLoginSuccess ? "Login successful."
+                : message == ManageMessageId.ChangeNotificationSuccess ? "Notification settings has been changed."
                 : message == ManageMessageId.SentConfirmEmail ? "An email verification link has been sent to your email."
                 : message == ManageMessageId.Clear2FASuccess ? "Remembered browser has been cleared. When you login again, you'll be asked again for 2nd and 3rd authentication credentials."
                 : "";
@@ -153,6 +155,91 @@ namespace TFA.Controllers
                 EmailConfirmed = user.EmailConfirmed
             };
             return View(model);
+        }
+
+        public void SendNotifications(ApplicationUser user, string lockoutType, NotificationType nt)
+        {
+            try
+            {
+                var sl = new SecLog
+                {
+                    Type = String.IsNullOrEmpty(lockoutType) ? "User Account Lockout" : lockoutType,
+                    Date = DateTime.Now,
+                    UserName = user.UserName
+                };
+                secLog.SecLogs.Add(sl);
+                secLog.SaveChanges();
+
+                string date = DateTime.Now.ToLongDateString();
+                switch (nt)
+                {
+                    case NotificationType.AccountLockout:
+                        if (user.AccountLockoutSMS) SendSmsNotification(user, "Account Lockout", "Your account " + user.Email + " has been locked out because of failed login attempt.");
+                        if (user.AccountLockoutEmail) SendEmailNotification(user, "Account Lockout", "Your account " + user.Email + " has been locked out because of failed login attempt.");
+                        break;
+                    case NotificationType.ChangePassword:
+                        if (user.ChangePasswordSMS) SendSmsNotification(user, "Password Changed", "Your password has been changed on " + date);
+                        if (user.ChangePasswordEmail) SendEmailNotification(user, "Password Changed", "Your password has been changed on " + date);
+                        break;
+                    case NotificationType.ChangePhoneNumber:
+                        if (user.ChangePasswordSMS) SendSmsNotification(user, "Phone Number Changed", "Your phone number has been changed on " + date);
+                        if (user.ChangePasswordEmail) SendEmailNotification(user, "Phone Number Changed", "Your phone number has been changed on " + date);
+                        break;
+                }
+
+                //if (UserManager.SmsService != null)
+                //{
+                //}
+            }
+            catch (Exception e)
+            {
+                View("Error");
+            }
+        }
+
+        public bool SendSmsNotification(ApplicationUser user, string subject, string msg)
+        {
+            try
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = user.PhoneNumber,
+                    Body = String.IsNullOrEmpty(msg) ? ("Your account " + user.Email + " has been locked out because of failed login attempt.") : msg,
+                    Subject = String.IsNullOrEmpty(subject) ? "Three-Factor Authentication" : subject
+                };
+                UserManager.SmsService.Send(message);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool SendEmailNotification(ApplicationUser user, string subject, string msg)
+        {
+            try
+            {
+                UserManager.SendEmail(
+                    user.Id,
+                    String.IsNullOrEmpty(subject) ? "Three-Factore Authentication" : msg,
+                    String.IsNullOrEmpty(msg) ? "Your account has been lockout because of failed login attempt." : msg
+                    );
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public enum NotificationType
+        {
+            ChangePassword,
+            ChangePhoneNumber,
+            AccountLockout
         }
 
         //
@@ -237,7 +324,7 @@ namespace TFA.Controllers
                 return View("Error");
             }
 
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ChangeNotificationSuccess });
         }
 
         //
@@ -355,11 +442,12 @@ namespace TFA.Controllers
             var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+                SendNotifications(user, "", NotificationType.ChangePhoneNumber);
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
             // If we got this far, something failed, redisplay form
@@ -449,6 +537,7 @@ namespace TFA.Controllers
                     await UserManager.UpdateAsync(user);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+                SendNotifications(user, "", NotificationType.ChangePassword);
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
@@ -601,7 +690,8 @@ namespace TFA.Controllers
             ChangeEmailSuccess,
             Clear2FASuccess,
             SentConfirmEmail,
-            ImageLoginSuccess
+            ImageLoginSuccess,
+            ChangeNotificationSuccess
         }
 
 #endregion
