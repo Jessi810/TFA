@@ -5,6 +5,15 @@ using Microsoft.Owin.Security;
 
 namespace TFA.Models
 {
+    public class NotificationSettings
+    {
+        public bool ChangePasswordSMS { get; set; }
+        public bool ChangePasswordEmail { get; set; }
+        public bool ChangePhoneNumberSMS { get; set; }
+        public bool ChangePhoneNumberEmail { get; set; }
+        public bool AccountLockoutSMS { get; set; }
+        public bool AccountLockoutEmail { get; set; }
+    }
     public class ChangeEmailViewModel
     {
         [Required]

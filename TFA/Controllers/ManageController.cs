@@ -180,6 +180,67 @@ namespace TFA.Controllers
         }
 
         //
+        // GET: /Manage/NotificationSettings
+        public async Task<ActionResult> NotificationSettings()
+        {
+            NotificationSettings ns;
+            ApplicationUser user;
+
+            try
+            {
+                ns = new NotificationSettings();
+                user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            }
+            catch (Exception e)
+            {
+                return View("Error");
+            }
+
+            ns.ChangePasswordEmail = user.ChangePasswordEmail;
+            ns.ChangePasswordSMS = user.ChangePasswordSMS;
+            ns.ChangePhoneNumberEmail = user.ChangePhoneNumberEmail;
+            ns.ChangePhoneNumberSMS = user.ChangePhoneNumberSMS;
+            ns.AccountLockoutEmail = user.AccountLockoutEmail;
+            ns.AccountLockoutSMS = user.AccountLockoutSMS;
+            return View(ns);
+        }
+
+        //
+        // POST: /Manage/NotificationSettings
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> NotificationSettings(NotificationSettings model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            user.ChangePasswordEmail = model.ChangePasswordEmail;
+            user.ChangePasswordSMS = model.ChangePasswordSMS;
+            user.ChangePhoneNumberEmail = model.ChangePhoneNumberEmail;
+            user.ChangePhoneNumberSMS = user.ChangePhoneNumberSMS;
+            user.AccountLockoutEmail = model.AccountLockoutEmail;
+            user.AccountLockoutSMS = model.AccountLockoutSMS;
+
+            try
+            {
+                await UserManager.UpdateAsync(user);
+            }
+            catch (Exception e)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("Index", "Manage");
+        }
+
+        //
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {

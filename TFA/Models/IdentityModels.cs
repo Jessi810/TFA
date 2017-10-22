@@ -26,6 +26,14 @@ namespace TFA.Models
         public bool ThreeFactorEnabled { get; set; }
 
         public string VCode { get; set; }
+
+        // Notifications
+        public bool ChangePasswordSMS { get; set; }
+        public bool ChangePasswordEmail { get; set; }
+        public bool ChangePhoneNumberSMS { get; set; }
+        public bool ChangePhoneNumberEmail { get; set; }
+        public bool AccountLockoutSMS { get; set; }
+        public bool AccountLockoutEmail { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

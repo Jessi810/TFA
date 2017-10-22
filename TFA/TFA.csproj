@@ -314,6 +314,7 @@
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Shared\_LogoffPartial.cshtml" />
     <Content Include="Views\Shared\_Clear2FA.cshtml" />
+    <Content Include="Views\Manage\NotificationSettings.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
