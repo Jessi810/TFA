@@ -8,6 +8,7 @@
 {
     @Html.AntiForgeryToken()
     <h4>Select your set image password</h4>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @*@ViewBag.ImageLoginMessage*@
     <hr />
 

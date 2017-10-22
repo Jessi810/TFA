@@ -149,6 +149,11 @@ namespace TFA.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ImageLogin(string email)
         {
+            if (String.IsNullOrEmpty(email))
+            {
+                return View("Error");
+            }
+
             ApplicationUser user;
             try
             {
@@ -176,16 +181,14 @@ namespace TFA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ImageLogin(ImageLoginViewModel model)
         {
-            if (model.ImageSerial == null)
+            if (String.IsNullOrEmpty(model.Email))
             {
-                ModelState.AddModelError("", "Please select an images to continue.");
-                return View(img.Images.ToList());
+                return RedirectToAction("Login", "Account");
             }
 
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                ModelState.AddModelError("", "Cannot login.");
                 return RedirectToAction("Login");
             }
 
@@ -200,18 +203,28 @@ namespace TFA.Controllers
             {
                 await UserManager.AccessFailedAsync(user.Id);
                 ModelState.AddModelError("", "Please select the right images to login");
+                TempData["UserEmail"] = model.Email;
                 return View(img.Images.ToList());
             }
 
+            // Check if user has selected and images
             if (model.ImageSerial == null)
             {
                 await UserManager.AccessFailedAsync(user.Id);
-
+                ModelState.AddModelError("", "Please select an images to continue.");
                 TempData["UserEmail"] = model.Email;
-                //ViewBag.ImageLoginMessage = "Please select the right images to login";
-                ModelState.AddModelError("", "Please select the right images to login");
                 return View(img.Images.ToList());
+                //return RedirectToAction("ImageLogin", new { Email = model.Email });
             }
+
+            //if (model.ImageSerial == null)
+            //{
+
+            //    TempData["UserEmail"] = model.Email;
+            //    //ViewBag.ImageLoginMessage = "Please select the right images to login";
+            //    ModelState.AddModelError("", "Please select the right images to login");
+            //    return View(img.Images.ToList());
+            //}
 
             // Encode
             var hashCode = user.VCode;
@@ -220,7 +233,7 @@ namespace TFA.Controllers
             if (user.SerialHash.Equals(encodeSerial))
             {
                 await UserManager.ResetAccessFailedCountAsync(user.Id);
-                return RedirectToAction("Index", "Manage");
+                return RedirectToAction("Index", "Manage", new { Message = ManageMessageId.ImageLoginSuccess });
             }
             else
             {
