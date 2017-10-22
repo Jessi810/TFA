@@ -195,6 +195,7 @@ namespace TFA.Controllers
             if (await UserManager.IsLockedOutAsync(user.Id))
             {
                 AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                SendNotifications(user, "Account Lockout", NotificationType.AccountLockout);
 
                 return View("Lockout");
             }
@@ -323,6 +324,10 @@ namespace TFA.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
+            if (UserManager.IsLockedOut(user.Id))
+            {
+                SendNotifications(user, "Account Lockout", NotificationType.AccountLockout);
+            }
             switch (result)
             {
                 case SignInStatus.Success:
@@ -337,30 +342,6 @@ namespace TFA.Controllers
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
-
-                    var sl = new SecLog
-                    {
-                        Type = "User Account Lockout",
-                        Date = DateTime.Now,
-                        UserName = user.UserName
-                    };
-
-                    secLog.SecLogs.Add(sl);
-                    await secLog.SaveChangesAsync();
-
-                    if (UserManager.SmsService != null)
-                    {
-                        var message = new IdentityMessage
-                        {
-                            Destination = user.PhoneNumber,
-                            Body = "Your account " + model.Email + " has been locked out because of failed login attempt."
-                        };
-                        await UserManager.SmsService.SendAsync(message);
-                    }
-
-                    await UserManager.SendEmailAsync(user.Id, "Account Lockout", "Your account has been lockout because of failed login attempt.");
-
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe, Email = model.Email });
@@ -369,6 +350,91 @@ namespace TFA.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+        }
+
+        public void SendNotifications(ApplicationUser user, string lockoutType, NotificationType nt)
+        {
+            try
+            {
+                var sl = new SecLog
+                {
+                    Type = String.IsNullOrEmpty(lockoutType) ? "User Account Lockout" : lockoutType,
+                    Date = DateTime.Now,
+                    UserName = user.UserName
+                };
+                secLog.SecLogs.Add(sl);
+                secLog.SaveChanges();
+
+                string date = DateTime.Now.ToLongDateString();
+                switch (nt)
+                {
+                    case NotificationType.AccountLockout:
+                        if (user.AccountLockoutSMS) SendSmsNotification(user, "Account Lockout", "Your account " + user.Email + " has been locked out because of failed login attempt.");
+                        if (user.AccountLockoutEmail) SendEmailNotification(user, "Account Lockout", "Your account " + user.Email + " has been locked out because of failed login attempt.");
+                        break;
+                    case NotificationType.ChangePassword:
+                        if (user.ChangePasswordSMS) SendSmsNotification(user, "Password Changed", "Your password has been changed on " + date);
+                        if (user.ChangePasswordEmail) SendEmailNotification(user, "Password Changed", "Your password has been changed on " + date);
+                        break;
+                    case NotificationType.ChangePhoneNumber:
+                        if (user.ChangePasswordSMS) SendSmsNotification(user, "Phone Number Changed", "Your phone number has been changed on " + date);
+                        if (user.ChangePasswordEmail) SendEmailNotification(user, "Phone Number Changed", "Your phone number has been changed on " + date);
+                        break;
+                }
+
+                //if (UserManager.SmsService != null)
+                //{
+                //}
+            }
+            catch (Exception e)
+            {
+                View("Error");
+            }
+        }
+
+        public bool SendSmsNotification(ApplicationUser user, string subject, string msg)
+        {
+            try
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = user.PhoneNumber,
+                    Body = String.IsNullOrEmpty(msg) ? ("Your account " + user.Email + " has been locked out because of failed login attempt.") : msg,
+                    Subject = String.IsNullOrEmpty(subject) ? "Three-Factor Authentication" : subject
+                };
+                UserManager.SmsService.Send(message);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool SendEmailNotification(ApplicationUser user, string subject, string msg)
+        {
+            try
+            {
+                UserManager.SendEmail(
+                    user.Id,
+                    String.IsNullOrEmpty(subject) ? "Three-Factore Authentication" : msg,
+                    String.IsNullOrEmpty(msg) ? "Your account has been lockout because of failed login attempt." : msg
+                    );
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public enum NotificationType
+        {
+            ChangePassword,
+            ChangePhoneNumber,
+            AccountLockout
         }
 
         //
@@ -402,6 +468,10 @@ namespace TFA.Controllers
             // You can configure the account lockout settings in IdentityConfig
             var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: true);
             ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (await UserManager.IsLockedOutAsync(user.Id))
+            {
+                SendNotifications(user, "Account Lockout", NotificationType.AccountLockout);
+            }
             switch (result)
             {
                 case SignInStatus.Success:
@@ -418,30 +488,6 @@ namespace TFA.Controllers
 
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
-                    //ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
-
-                    var sl = new SecLog
-                    {
-                        Type = "User Account Lockout",
-                        Date = DateTime.Now,
-                        UserName = model.Email
-                    };
-
-                    secLog.SecLogs.Add(sl);
-                    await secLog.SaveChangesAsync();
-
-                    if (UserManager.SmsService != null)
-                    {
-                        var message = new IdentityMessage
-                        {
-                            Destination = user.PhoneNumber,
-                            Body = "Your account " + model.Email + " has been locked out because of failed login attempt."
-                        };
-                        await UserManager.SmsService.SendAsync(message);
-                    }
-
-                    await UserManager.SendEmailAsync(user.Id, "Account Lockout", "Your account has been lockout because of failed login attempt.");
-
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:
